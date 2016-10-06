@@ -131,9 +131,11 @@ public:
             cout<<"***remove(): head is empty!!"<<endl;
             return nullptr;
         }
+        // head or not
         if(head==card){
             head=card->next;
             card->next=nullptr;
+            return card;
         }else{
             for(Card* p=head;p->next;p=p->next){
                 if(p->next==card){
@@ -144,8 +146,8 @@ public:
             }
             // fail
             cout<<"***remove(): can NOT find card:"<<card<<endl;
-        }
-        return nullptr;
+            return nullptr;
+        }        
     }
 
     void report(){

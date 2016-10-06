@@ -131,6 +131,7 @@ public:
             if(goodInput)
                 break;
         }
+
         // get cards to keep
         int keepCount=0;
         for(int i=0;i<kp.length();i++){
@@ -138,16 +139,22 @@ public:
             assert(keepIndex>=0 && keepIndex<5);
             keepCards[keepIndex]=true;
             keepCount++;
-        }
+        }        
         // discard cards
         for(int i=4;i>=0;i--){
-            if(!keepCards[i])
-                discard->append(hand->remove(hand->at(i)));
+            if(!keepCards[i]){
+                cout<<"will discard card:"<<i<<" which is ";
+                Card* toRemove=hand->remove(hand->at(i));
+                discard->append(toRemove);
+            }
+            hand->report();
         }
+        cout<<"After discarding"<<endl;
         // draw new cards
         int discardCount=5-keepCount;
         for(int i=0;i<discardCount;i++)
             draw_a_card();
+        hand->report();
     }
 
     void draw_a_card(){

@@ -19,6 +19,10 @@ public:
             assert(p->deck->length()==52-i);
             p->draw_a_card();
         }
+        for(int i=4;i>=0;i--){
+            p->hand->remove(p->hand->at(i));
+            p->hand->report();
+        }
         delete p;
     }
     static void swap_a_card_test(){
