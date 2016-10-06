@@ -10,7 +10,9 @@
 
 using namespace std;
 
+class PlayerTest;
 class Player{
+    friend class PlayerTest;
 public:
     Player():money(10){
         deck=new CardList(true);
@@ -24,6 +26,9 @@ public:
     }
 
     pair<string,int> oneRound(){
+        showMoney();
+        money--;
+        cout<<"You payed $1 for this round!"<<endl;
         showMoney();
         // start and draw 5 cards
         while(true){
@@ -75,7 +80,8 @@ public:
             cout<<"*** swap is for DEBUG! Only Walt and Yi can use that."<<endl;
             cmd_swap();
         }else if(cmd=="keep"){
-            cmd_keep();
+            cmd_keep();            
+            return "next";
         }
         return "";
     }
@@ -104,13 +110,7 @@ public:
             if(myIndex>=0 && myIndex<5 && deckIndex>=0 && deckIndex<deck->length())
                 break;
         }
-        // swap
-        Card* myRemove=hand->remove(hand->at(myIndex));
-        Card* deckRemove=deck->remove(deck->at(deckIndex));
-        hand->append(deckRemove);
-        deck->append(myRemove);
-        hand->sort();
-        deck->sort();
+        swap_a_card(myIndex, deckIndex);
     }
     void cmd_keep(){
         cout<<"Please input card indice to tell me what cards to keep, e.g. 013:"<<endl;
@@ -134,13 +134,13 @@ public:
         // get cards to keep
         int keepCount=0;
         for(int i=0;i<kp.length();i++){
-            int keepIndex=kp[i]-'0';
+            int keepIndex=char(kp[i])-char('0');
             assert(keepIndex>=0 && keepIndex<5);
             keepCards[keepIndex]=true;
             keepCount++;
         }
         // discard cards
-        for(int i=0;i<5;i++){
+        for(int i=4;i>=0;i--){
             if(!keepCards[i])
                 discard->append(hand->remove(hand->at(i)));
         }
@@ -162,6 +162,27 @@ public:
         int index=rand()%deck->length();
         Card* one=deck->remove(deck->at(index));
         hand->append(one);
+        hand->sort();
+    }
+    void swap_a_card(int handIndex, int deckIndex){
+        Card* handRemove=hand->remove(hand->at(handIndex));
+        Card* deckRemove=deck->remove(deck->at(deckIndex));
+        hand->append(deckRemove);
+        deck->append(handRemove);
+        hand->sort();
+        deck->sort();
+    }
+
+    void showMoney(){
+        cout<<"Now you have: $"<<money<<endl;
+    }
+    void showCards(){
+        cout<<"Your hand cards:";
+        hand->report();
+    }
+    void showDeck(){
+        cout<<"Your deck cards:";
+        deck->report();
     }
 
     void start(){
@@ -186,17 +207,6 @@ public:
             // start another round
             cout<<"Now, let's start another round!"<<endl;
         }
-    }
-    void showMoney(){
-        cout<<"You have $"<<money<<endl;
-    }
-    void showCards(){
-        cout<<"Your hand cards:";
-        hand->report();
-    }
-    void showDeck(){
-        cout<<"Your deck cards:";
-        deck->report();
     }
 
 private:

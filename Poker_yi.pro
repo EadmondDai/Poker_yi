@@ -9,4 +9,5 @@ HEADERS += \
     cardlist.h \
     cardlist_test.h \
     player.h \
-    judger.h
+    judger.h \
+    player_test.h
