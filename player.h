@@ -114,7 +114,6 @@ public:
     }
     void cmd_keep(){
         cout<<"Please input card indice to tell me what cards to keep, e.g. 013:"<<endl;
-        showNumbers(5);
         hand->report();
         // get good input
         string kp;
@@ -160,15 +159,9 @@ public:
             discard=temp;
         }
         // there is >=1 card in deck now!
-        Card* one=deck->remove(deck->at(rand()%deck->length()));
+        int index=rand()%deck->length();
+        Card* one=deck->remove(deck->at(index));
         hand->append(one);
-    }
-
-    void showNumbers(int to){
-        for(int i=0;i<to;i++){
-            cout<<i<<" ";
-        }
-        cout<<endl;
     }
 
     void start(){

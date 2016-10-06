@@ -15,7 +15,11 @@ int main(){
     srand(time(nullptr));
 
     Player p;
-    p.start();
+    p.showMoney();
+
+    p.draw_a_card();
+    p.showDeck();
+    p.showCards();
 
     return 0;
 }

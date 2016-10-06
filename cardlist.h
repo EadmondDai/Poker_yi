@@ -2,6 +2,7 @@
 #define CARDLIST_H
 
 #include <cassert>
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -37,7 +38,10 @@ struct Card{
         return this->suit==c.suit && this->value==c.value;
     }
     friend ostream& operator << (ostream& out, const Card& c){
-        out<<c.suit<<c.value;
+        string values[]={"0","A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        out<<c.suit<<values[c.value]<<" ";
+        if(c.value!=10)
+            out<<" ";
         return out;
     }
 };
@@ -72,10 +76,14 @@ public:
     }
 public:
     void append(Card* card){
-        Card* p=head;
-        for(;p->next;p=p->next)
-            ;
-        p->next=card;
+        if(!head)
+            head=card;
+        else{
+            Card* p=head;
+            while(p->next)
+                p=p->next;
+            p->next=card;
+        }
         card->next=nullptr;
     }
 
@@ -131,18 +139,34 @@ public:
                 if(p->next==card){
                     p->next=card->next;
                     card->next=nullptr;
-                    return nullptr;
+                    return card;
                 }
             }
             // fail
             cout<<"***remove(): can NOT find card:"<<card<<endl;
         }
-        return card;
+        return nullptr;
     }
 
     void report(){
-        for(const Card* p=head;p;p=p->next)
-            cout<<*p<<' ';
+        int len=length();
+        cout<<"=== Cards number is "<<len<<" ==="<<endl;
+        for(int i=0;i<len/20+1;i++){
+            for(int j=0;j<20;j++){
+                int index=i*20+j;
+                if(index>=len)
+                    break;
+                cout<<setiosflags(ios::left)<<"#"<<setw(3)<<index;
+            }
+            cout<<endl;
+            for(int j=0;j<20;j++){
+                int index=i*20+j;
+                if(index>=len)
+                    break;
+                cout<<*at(index);
+            }
+            cout<<endl;
+        }
         cout<<endl;
     }
 
