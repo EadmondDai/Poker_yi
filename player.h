@@ -81,7 +81,7 @@ public:
     }
 
     void cmd_deck(){
-        deck->report();
+        showDeck();
     }
     void cmd_start(){
         // draw 5 cards

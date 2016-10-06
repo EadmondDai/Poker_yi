@@ -2,6 +2,7 @@
 #define CARDLIST_H
 
 #include <cassert>
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -37,7 +38,10 @@ struct Card{
         return this->suit==c.suit && this->value==c.value;
     }
     friend ostream& operator << (ostream& out, const Card& c){
-        out<<c.suit<<c.value;
+        string values[]={"0","A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+        out<<c.suit<<values[c.value]<<" ";
+        if(c.value!=10)
+            out<<" ";
         return out;
     }
 };
@@ -141,8 +145,19 @@ public:
     }
 
     void report(){
-        for(const Card* p=head;p;p=p->next)
-            cout<<*p<<' ';
+        int i=0;
+        const Card* p=head;
+        int len=length();
+        for(int i=0;i<len;i++){
+            cout<<setw(4)<<i;
+            if(i%10==0)
+                cout<<endl;
+        }
+        for(const Card* p=head;p;p=p->next){
+            cout<<*p;
+            if(i++ %10==0)
+                cout<<endl;
+        }
         cout<<endl;
     }
 

@@ -15,7 +15,7 @@ int main(){
     srand(time(nullptr));
 
     Player p;
-    p.start();
+    p.showDeck();
 
     return 0;
 }
