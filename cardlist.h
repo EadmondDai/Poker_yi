@@ -76,10 +76,14 @@ public:
     }
 public:
     void append(Card* card){
-        Card* p=head;
-        for(;p->next;p=p->next)
-            ;
-        p->next=card;
+        if(!head)
+            head=card;
+        else{
+            Card* p=head;
+            while(p->next)
+                p=p->next;
+            p->next=card;
+        }
         card->next=nullptr;
     }
 
@@ -127,36 +131,43 @@ public:
             cout<<"***remove(): head is empty!!"<<endl;
             return nullptr;
         }
+        // head or not
         if(head==card){
             head=card->next;
             card->next=nullptr;
+            return card;
         }else{
             for(Card* p=head;p->next;p=p->next){
                 if(p->next==card){
                     p->next=card->next;
                     card->next=nullptr;
-                    return nullptr;
+                    return card;
                 }
             }
             // fail
             cout<<"***remove(): can NOT find card:"<<card<<endl;
-        }
-        return card;
+            return nullptr;
+        }        
     }
 
     void report(){
-        int i=0;
-        const Card* p=head;
         int len=length();
-        for(int i=0;i<len;i++){
-            cout<<setw(4)<<i;
-            if(i%10==0)
-                cout<<endl;
-        }
-        for(const Card* p=head;p;p=p->next){
-            cout<<*p;
-            if(i++ %10==0)
-                cout<<endl;
+        cout<<"=== Cards number is "<<len<<" ==="<<endl;
+        for(int i=0;i<len/20+1;i++){
+            for(int j=0;j<20;j++){
+                int index=i*20+j;
+                if(index>=len)
+                    break;
+                cout<<setiosflags(ios::left)<<"#"<<setw(3)<<index;
+            }
+            cout<<endl;
+            for(int j=0;j<20;j++){
+                int index=i*20+j;
+                if(index>=len)
+                    break;
+                cout<<*at(index);
+            }
+            cout<<endl;
         }
         cout<<endl;
     }

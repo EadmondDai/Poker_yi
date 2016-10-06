@@ -4,12 +4,14 @@
 #include "cardlist.h"
 #include "cardlist_test.h"
 #include "player.h"
+#include "player_test.h"
 
 using namespace std;
 
 int main(){
 
-    CardListTest::test();
+//    CardListTest::test();
+//    PlayerTest::test();
 
     // setup rand
     srand(time(nullptr));
