@@ -10,14 +10,14 @@ using namespace std;
 
 int main(){
 
-//    CardListTest::test();
-//    PlayerTest::test();
+    CardListTest::test();
+    PlayerTest::test();
 
     // setup rand
     srand(time(nullptr));
 
     Player p;
-    p.showDeck();
+    p.start();
 
     return 0;
 }

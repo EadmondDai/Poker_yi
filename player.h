@@ -49,20 +49,28 @@ public:
         }
         showCards();
         // judge!
-        int winMoney=Judger::judge(hand);
+        pair<string,int> winItem=Judger::judge(hand);
+        string winThing=winItem.first;
+        int winMoney=winItem.second;
+        cout<<"You win $"<<winMoney<<" for "<<winThing<<endl;
         if(winMoney==0)
             return {"",0};
         else
-            return {"win", winMoney};
+            return {"win",winMoney};
     }
 
     string get_cmd(vector<string> valid){
-        cout<<"Input command, choose from: {";
-        for(const string s : valid)
-            cout<<s<<",";
-        cout<<"} ";
+        // create cmd
         string cmd;
+        // make msg
+        string msg="* Please input command from {";
+        for(const string s : valid)
+            msg+=(s+",");
+        msg[msg.length()-1]='}';
+        msg+=":";
+        // input loop
         while(true){
+            cout<<msg<<endl;
             cin>>cmd;
             // command is valid
             if(find(valid.begin(),valid.end(),cmd)!=valid.end())
@@ -78,10 +86,10 @@ public:
         }else if(cmd=="deck"){
             cmd_deck();
         }else if(cmd=="swap"){
-            cout<<"*** swap is for DEBUG! Only Walt and Yi can use that."<<endl;
+            cout<<"* Swap is for DEBUG! Only Walt and Yi can use that."<<endl;
             cmd_swap();
         }else if(cmd=="keep"){
-            cmd_keep();            
+            cmd_keep();
             return "next";
         }
         return "";
@@ -97,8 +105,7 @@ public:
         }
     }
     void cmd_swap(){
-        cout<<"To debug-swap, please enter as follow: 1,20, which means to swap your #1 card with deck's #20 card."<<endl;
-        cout<<"Please notice that since we are debugging, you MUST input correctly."<<endl;
+        cout<<"* Example: enter [1,20] to swap your #1 hand-card with #20 deck-card. Please input:"<<endl;
         // input
         string cmd;
         int myIndex=0, deckIndex=0;
@@ -112,35 +119,40 @@ public:
                 break;
         }
         swap_a_card(myIndex, deckIndex);
+        showCards();
     }
     void cmd_keep(){
-        cout<<"Please input card indice to tell me what cards to keep, e.g. 013:"<<endl;
-        hand->report();
         // get good input
         string kp;
-        bool keepCards[]={false,false,false,false,false};
         while(true){
+            cout<<"Please input card indice you want to keep, [none]=keep nothing, [01]=keep #0 and #1:"<<endl;
             cin>>kp;
-            bool goodInput=true;
-            for(int i=0;i<kp.length();i++){
-                if(kp[i]<'0' || kp[i]>'9'){
-                    cout<<"*** please input numbers!"<<endl;
-                    goodInput=false;
-                    break;
-                }
-            }
-            if(goodInput)
+            if(kp=="none"){
+                kp="";
                 break;
+            }else{
+                bool goodInput=true;
+                for(int i=0;i<kp.length();i++){
+                    if(kp[i]<'0' || kp[i]>='5'){
+                        cout<<"*** please input numbers between [0,4]!!"<<endl;
+                        goodInput=false;
+                        break;
+                    }
+                }
+                if(goodInput)
+                    break;
+            }
         }
 
         // get cards to keep
+        bool keepCards[]={false,false,false,false,false};
         int keepCount=0;
         for(int i=0;i<kp.length();i++){
             int keepIndex=char(kp[i])-char('0');
             assert(keepIndex>=0 && keepIndex<5);
             keepCards[keepIndex]=true;
             keepCount++;
-        }        
+        }
         // discard cards
         for(int i=4;i>=0;i--){
             if(!keepCards[i]){
@@ -153,7 +165,6 @@ public:
         for(int i=0;i<discardCount;i++)
             draw_a_card();
         cout<<"After exchanging...."<<endl;
-        hand->report();
     }
 
     void draw_a_card(){
@@ -183,11 +194,11 @@ public:
         cout<<"Now you have: $"<<money<<endl;
     }
     void showCards(){
-        cout<<"Your hand cards:";
+        cout<<"Your hand cards:"<<endl;
         hand->report();
     }
     void showDeck(){
-        cout<<"Your deck cards:";
+        cout<<"Your deck cards:"<<endl;
         deck->report();
     }
 
@@ -204,13 +215,20 @@ public:
             if(result.first=="win"){
                 money+=result.second;
                 showMoney();
+            }else{
+                if(money<=0){
+                    cout<<"You've no money! GAME OVER!"<<endl;
+                    return;
+                }
             }
+
             // hand ==> discard
             for(int i=0;i<5;i++){
                 Card* one=hand->remove(hand->at(0));
                 discard->append(one);
             }
             // start another round
+            cout<<"*************************************"<<endl;
             cout<<"Now, let's start another round!"<<endl;
         }
     }

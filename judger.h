@@ -14,41 +14,44 @@ public:
     // 3 of a Kind: 3
     // 2 Pair: 2
     // 1 J+ Pair: 1
-    static int judge(CardList* list){
+    static pair<string,int> judge(CardList* list){
 
         // Royal Flush (Royal Straight Flush)
         if(isRoyal(list) && isFlush(list) && isStraight(list))
-            return 800;
+            return {"Royal Flush", 800};
 
         // Straight Flush
         if(isStraight(list) && isFlush(list))
-            return 50;
+            return {"Straight Flush", 50};
 
         // 4 of a kind
         if(is4(list))
-            return 25;
+            return {"4 of a Kind", 25};
 
         // Full House
         if(is3(list) && n2(list))
-            return 9;
+            return {"Full House", 9};
 
         // Flush (all in one kind)
         if(isFlush(list))
-            return 6;
+            return {"Flush", 6};
+
+        if(isStraight(list))
+            return {"Straight", 4};
 
         // 3 of a kind
         if(is3(list))
-            return 3;
+            return {"3 of a Kind", 3};
 
         // 2 pair
         if(n2(list)==2)
-            return 2;
+            return {"2 Pair", 2};
 
         // 1 J+ pair
         if(is1(list))
-            return 1;
+            return {"1 J+ Pair", 1};
 
-        return 0;
+        return {"nothing", 0};
     }
     static bool isRoyal(CardList* list){
         return list->containsValue(10) && list->containsValue(11) && list->containsValue(12) && list->containsValue(13) && list->containsValue(1);
@@ -67,12 +70,11 @@ public:
         return list->containsSuit('S')==3 || list->containsSuit('H')==3 || list->containsSuit('C')==3 || list->containsSuit('D')==3;
     }
     static int n2(CardList* list){
-        char suit[]={'S','H','C','D'};
-        int count=0;
-        for(int i=0;i<4;i++)
-            if(list->containsSuit(suit[i])==2)
-                count++;
-        return count;
+        int pairs=0;
+        for(int i=1;i<=13;i++)
+            if(list->containsValue(i)==2)
+                pairs++;
+        return pairs;
     }
     static bool is1(CardList* list){
         int value[]={11,12,13,1};
