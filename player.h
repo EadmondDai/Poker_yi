@@ -57,9 +57,10 @@ public:
     }
 
     string get_cmd(vector<string> valid){
-        cout<<"Input command, choose from: ";
+        cout<<"Input command, choose from: {";
         for(const string s : valid)
-            cout<<s<<" ";
+            cout<<s<<",";
+        cout<<"} ";
         string cmd;
         while(true){
             cin>>cmd;
@@ -143,17 +144,15 @@ public:
         // discard cards
         for(int i=4;i>=0;i--){
             if(!keepCards[i]){
-                cout<<"will discard card:"<<i<<" which is ";
                 Card* toRemove=hand->remove(hand->at(i));
                 discard->append(toRemove);
             }
-            hand->report();
         }
-        cout<<"After discarding"<<endl;
         // draw new cards
         int discardCount=5-keepCount;
         for(int i=0;i<discardCount;i++)
             draw_a_card();
+        cout<<"After exchanging...."<<endl;
         hand->report();
     }
 
