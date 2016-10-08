@@ -29,7 +29,7 @@ public:
             return {"4 of a Kind", 25};
 
         // Full House
-        if(is3(list) && n2(list))
+        if(is3(list) && n2(list)==1)
             return {"Full House", 9};
 
         // Flush (all in one kind)
@@ -64,10 +64,16 @@ public:
         return isRoyal(list) || list->at(4)->value - list->at(0)->value == 4;
     }
     static bool is4(CardList* list){
-        return list->containsSuit('S')==4 || list->containsSuit('H')==4 || list->containsSuit('C')==4 || list->containsSuit('D')==4;
+        for(int i=1;i<13;i++)
+            if(list->containsValue(i)==4)
+                return true;
+        return false;
     }
     static bool is3(CardList* list){
-        return list->containsSuit('S')==3 || list->containsSuit('H')==3 || list->containsSuit('C')==3 || list->containsSuit('D')==3;
+        for(int i=1;i<=13;i++)
+            if(list->containsValue(i)==3)
+                return true;
+        return false;
     }
     static int n2(CardList* list){
         int pairs=0;

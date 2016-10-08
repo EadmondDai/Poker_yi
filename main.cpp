@@ -24,13 +24,15 @@ int main(){
 //    CardListTest::test();
 //    PlayerTest::test();
 
+
     // setup rand
     srand(time(nullptr));
 
     Player* p=new Player;
     p->start();
-
 	delete p;
+
 	_CrtDumpMemoryLeaks();
+
     return 0;
 }
