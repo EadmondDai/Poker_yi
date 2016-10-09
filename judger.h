@@ -61,7 +61,13 @@ public:
     }
     static bool isStraight(CardList* list){
         list->sort();
-        return isRoyal(list) || list->at(4)->value - list->at(0)->value == 4;
+		if(isRoyal(list)) return true;
+		//if (list->at(4)->value - list->at(0)->value != 4) return false;
+		int baseValue = list->at(0)->value;
+		for (int i = 1; i < 5; i++)
+			if (list->at(i)->value != baseValue + i)
+				return false;
+		return true;
     }
     static bool is4(CardList* list){
         for(int i=1;i<13;i++)

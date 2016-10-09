@@ -105,6 +105,8 @@ public:
         }
     }
     void cmd_swap(){
+		cout << "To swap, here's the current deck:" << endl;
+		showDeck();
         cout<<"* Example: enter [1,20] to swap your #1 hand-card with #20 deck-card. Please input:"<<endl;
         // input
         string cmd;
